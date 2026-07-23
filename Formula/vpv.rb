@@ -16,7 +16,7 @@ class Vpv < Formula
     -DUSE_OCTAVE=OFF
     -DUSE_EXR=OFF
     -DUSE_LIBRAW=OFF
-    -DUSE_GDAL=ON
+    -DUSE_GDAL=OFF
   ]
 
   # uncomment for octave support:
@@ -34,11 +34,11 @@ class Vpv < Formula
     depends_on "mesa"
   end
 
-  def install
+  define_method("install") {
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
-  end
+  }
 
   test do
     # vpv is a GUI application; verify it was installed and responds to --help
