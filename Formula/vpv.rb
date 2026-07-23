@@ -7,25 +7,34 @@ class Vpv < Formula
   head "https://github.com/kidanger/vpv.git", branch: "dev"
 
   depends_on "cmake" => :build
-  depends_on "rust" => :build
-  depends_on "gdal"
   depends_on "jpeg-turbo"
   depends_on "libpng"
   depends_on "libtiff"
   depends_on "sdl2"
+
+  args = %w[
+    -DUSE_OCTAVE=OFF
+    -DUSE_EXR=OFF
+    -DUSE_LIBRAW=OFF
+    -DUSE_GDAL=ON
+  ]
+
+  # uncomment for octave support:
+  #depends_on "octave"
+  #args << "-DUSE_OCTAVE=ON"
+
+  # uncomment for gdal support:
+  #depends_on "gdal"
+  #args << "-DUSE_GDAL=ON"
+
+  # uncomment for additional features:
+  #depends_on "rust" => :build
 
   on_linux do
     depends_on "mesa"
   end
 
   def install
-    args = %w[
-      -DUSE_OCTAVE=OFF
-      -DUSE_EXR=OFF
-      -DUSE_LIBRAW=OFF
-      -DUSE_GDAL=ON
-    ]
-
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
